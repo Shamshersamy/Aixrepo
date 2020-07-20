@@ -1,0 +1,45 @@
+---
+##Demo anssible play for patching on rhel/CentOS server
+##This is for depo purpose only use at your on responsibility
+##You know your server batter Shamsher Singh
+- name: Ansible patching playbook
+  host: all
+  become: ansadmin
+  serial: 2
+  Tasks:
+     # purpose of this task to check application is running or stoped
+     - Name: Verify application/Database processes are not running
+     - shell: "ps -eaf|egrep 'appche|http'|grep -v grep > /dev/null ;then echo 'process_running' else ; 'process not running'; fi
+       ignore_error: true
+       register: app_process_check 
+  Tasks: This task is descision,play will fail/quit ifapplication is running
+     - nmae: descision poit to start patching 
+       fail: msg "{{Inventory_Hostname}} have running application, Please stop application first then atemt patching."
+       when: app_process_check_stdout == "process running"
+
+     #this task will start patching/install rpm's if application stoted
+     - name: upgrade all patckages on the server
+       yum:
+         name= "kernel"
+	 state=latest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Link for server patching video by ansible
+
+
+https://www.youtube.com/watch?v=7al0yehXa_g&t=127s 
